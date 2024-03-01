@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <section>
+        <div>
+            <p>
+                This script handles roomspace player movement and is completely independent from controller based movement. It doesn’t rely on rigid bodies, or a character controller. 
+                Instead, it uses its own physics casts, to detect collision and move the XR rig to keep the player outside of in-game objects including floors and ceiling.
+            </p>
+            <p>
+                The first step is to create an XR Rig. 
+            </p>
+            <div class="holder">
+                <img src="./assets/1 make xr rig.png">
+            </div>
+            <p>
+                then put the rig in an empty game object named player. 
+            </p>
+            <div class="holder">
+                <img src="./assets//3 put xr rig into player parent obj.png">
+            </div>
+            <p>
+                this player object is where this new script will go as well as any other movement scripts.
+            </p>
+            <h2>im going to explain parts of the script here but you can got to the bottom of the page for the full script.</h2>
+            <p> 
+                the first thing we need to do is move the XRRig when the players head collides with in-game objects.
+            </p>
+            <p>
+                to do this we need to define a few variables:
+                <br>• the XRRigs transform
+                <br>• the cameras transform
+                <br>• a physics layer mask for the collsions
+                <br>• and a radius of the player for the physics casts
+                <br>• also we need to store the cameras previous postion
+            </p>
+
+            <p>
+                in the update function we need to calculate the direction in which the camera has moved since the last update by subtracting the previous camera position from the current camera position.
+                <br>then perform a SphereCast in the direction of camera movement, starting from the previous camera position.
+            </p>
+            <div class="holder">
+                <img src="./assets/4 cast.png">
+            </div>
+            <p>
+                to move the XRRig we need a few functions:
+            </p>
+            <div class="holder">
+                <img src="./assets/move rig on hits functions.png">
+            </div>
+            <p>
+                <br>The hits from the SphereCast are passed to the MoveRigOnHit function.
+            </p>
+            <p>
+                MoveRigOnHit(RaycastHit[] hits) Function:
+                <br>This function is responsible for moving the rig based on the collision information received.
+                <br>If there are any hits detected, it calculates the average normal of the collision points and the total distance to move.
+                <br>It then moves the xrOriginTransform in the opposite direction of the average normal multiplied by the total distance to move.
+            </p>
+            <p>
+                GetAverageNormal(RaycastHit[] hits) Function:
+                <br>This function calculates the average normal vector from an array of RaycastHit objects.
+                <br>It iterates through each hit, summing up the normal vectors.
+                <br>Finally, it divides the sum by the number of hits to get the average normal vector.
+            </p>
+            <p>
+                GetDistanceToMove(RaycastHit[] hits) Function:
+                <br>This function calculates the total distance to move based on the hit information.
+                <br>It iterates through each hit, summing up the distances.
+                <br>Finally, it subtracts the product of the number of hits and the sphere's radius to get the total distance.
+            </p>
+
+            <p>this is all fine if you only collide with walls but if you collide with the ground or a ceiling you rig will move vertically and ground in your game will no longer line up with the ground in real life.
+                to resolve this we need to move the rig vertically back into it correct position after colliding.
+            </p>
+            <div class="holder">
+                <img src="./assets/return rig vertically.png">
+            </div>
+
+            <p>
+                this is the full script.  
+                In the inspector, you assign the cameraTrasnform as the camera object in the XRRig,
+                the xrOriginTransform as the XRRig,
+                and the layer mask as the physics layers that you want the collisions detected on.
+            </p>
+            <script src="https://gist.github.com/adhochero/ad07cd45067f06f01a91ff2d005f1e1e.js"></script>
+        </div>
+    </section>
+</body>
+</html>
