@@ -18,13 +18,13 @@
                 The first step is to create an XR Rig. 
             </p>
             <div class="holder">
-                <img src="./assets/1 make xr rig.png">
+                <img src="./assets/create xr rig.png">
             </div>
             <p>
                 then put the rig in an empty game object named player. 
             </p>
             <div class="holder">
-                <img src="./assets//3 put xr rig into player parent obj.png">
+                <img src="./assets//player obj parent.png">
             </div>
             <p>
                 this player object is where this new script will go as well as any other movement scripts.
@@ -47,7 +47,7 @@
                 <br>then perform a SphereCast in the direction of camera movement, starting from the previous camera position.
             </p>
             <div class="holder">
-                <img src="./assets/4 cast.png">
+                <img src="./assets/head cast.png">
             </div>
             <p>
                 to move the XRRig we need a few functions:
@@ -84,6 +84,41 @@
                 <img src="./assets/return rig vertically.png">
             </div>
 
+            <p>in here we make use of our projected positions that we use for our casts.</p>
+
+            <div class="holder">
+                <img src="./assets/projected positions.png">
+            </div>
+
+            <p>
+                in HandleUpdatingStandingPositionAndDetectingLean() we do a capsule cast from our last standingPositon and our current projectedCameraPositionDown.
+                if there is no collision we updated standingPositon to the projectedCameraPositionDown.
+                if it doesnt collide then we calculate a new standing positon along the edge of the collider.
+            </p>
+            <div class="holder">
+                <img src="./assets/update standing pos.png">
+            </div>
+            <p>
+                the second cast so to make sure there is no colliders inbetween your last and new standing position and then finally updates the standing position and sets leaning to true.
+            </p>
+            <p>
+                if we are leaning then we do leaning collision pushback, its similar to the push back for head collisions but we use a capsule collider instead of sphere collider. 
+                the capsule goes from above the standing positon to the head and allow for collision detection on things like window seals if leaning out a window.
+            </p>
+            <div class="holder">
+                <img src="./assets/lean pushback.png">
+            </div>
+
+            <p>
+                also while leaning we need to handle pushback for in the player leans too far from their standing position.
+                in HandleOverLeanDistancePushback() we handle it dynamicly use a cast downward to see the height of the thing youre leaning over. 
+                that way the lean distance allow changed depending on how much space you have above it.
+            </p>
+            <div class="holder">
+                <img src="./assets/dynamic lean distance.png">
+            </div>
+
+            
             <p>
                 this is the full script.  
                 In the inspector, you assign the cameraTrasnform as the camera object in the XRRig,
